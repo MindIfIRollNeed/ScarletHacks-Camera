@@ -1,6 +1,7 @@
 import cognitive_face as CF
 from firebase import firebase
-import cv2
+import pygame
+import pygame.camera
 import json
 import pprint
 from datetime import datetime
@@ -15,16 +16,17 @@ BASE_URL = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/'
 CF.BaseUrl.set(BASE_URL)
 
 # img_url = 'test.png'
-img_url = 'http://sugarandsawdust.com/wp-content/uploads/2017/08/fa35b0eb43fa459f8c7b2e7dcdd00226.jpg'
-cap = cv2.VideoCapture(0)
+img_url = 'test.jpg'
+pygame.camera.init()
+cam = pygame.camera.Camera("/dev/video0", (640,480))
+cam.start()
 
 firebase = firebase.FirebaseApplication('https://scarlethacks-e6978.firebaseio.com')
 
 # Saves picture taken to img_url
 def fetchFrame():
-    _, frame = cap.read()
-    _, frame = cap.read()
-    cv2.imwrite(img_url, frame)
+    img = cam.get_image()
+    pygame.image.save(img, img_url)
 
 def fetchFace():
     result = CF.face.detect(img_url, attributes='age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup')
@@ -41,7 +43,7 @@ def processFace():
                     rover.dispense()
             res['date'] = datetime.now().isoformat()
             print(res)
-            # r = firebase.post('/users', res)
+            r = firebase.post('/users', res)
         except Exception as e:
             print(str(e))
 
