@@ -3,23 +3,23 @@ from getch import getch
 import wiringpi as wp
 
 
-motor_1_speed = 100
+motor_1_speed = 29 
 motor_1_dir = 28
 motor_1_brake = 27
 
-motor_2_speed = 100
+motor_2_speed = 5
 motor_2_dir = 26
 motor_2_brake = 6
 
-motor_3_speed = 100
+motor_3_speed = 4
 motor_3_dir = 1
-motor_3_brake = 100
+motor_3_brake = 25
 
-motor_4_speed = 100
+motor_4_speed = 25
 motor_4_dir = 23
 motor_4_brake = 22
 
-dispense = 7
+dispenser = 7
 
 def setupPins():
     wp.wiringPiSetup()
@@ -40,7 +40,7 @@ def setupPins():
     wp.pinMode(motor_4_dir,1)
     wp.pinMode(motor_4_brake,1)
 
-    wp.pinMode(dispense,1)
+    wp.pinMode(dispenser,1)
 
     wp.softPwmCreate(motor_1_speed,100,100)
     wp.digitalWrite(motor_1_dir,1)
@@ -127,9 +127,9 @@ def rotateRight():
     wp.digitalWrite(motor_2_brake,0)
 
 def dispense():
-    wp.digitalWrite(dispense,1)
+    wp.digitalWrite(dispenser,1)
     wp.delay(40)
-    wp.digitalWrite(dispense,0)
+    wp.digitalWrite(dispenser,0)
 
 def reset():
     wp.digitalWrite(motor_1_brake,1)

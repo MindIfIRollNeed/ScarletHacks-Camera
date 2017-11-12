@@ -2,6 +2,7 @@ import cognitive_face as CF
 from firebase import firebase
 import pygame
 import pygame.camera
+from pygame import mixer
 import json
 import pprint
 from datetime import datetime
@@ -15,12 +16,12 @@ BASE_URL = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/'
 
 CF.BaseUrl.set(BASE_URL)
 
-# img_url = 'test.png'
-img_url = 'test.jpg'
+img_url = 'test.png'
 pygame.camera.init()
+mixer.init()
 cam = pygame.camera.Camera("/dev/video0", (640,480))
 cam.start()
-
+rover.setupPins()
 firebase = firebase.FirebaseApplication('https://scarlethacks-e6978.firebaseio.com')
 
 # Saves picture taken to img_url
@@ -33,19 +34,23 @@ def fetchFace():
     return result
 
 def processFace():
-    # fetchFrame()
+    fetchFrame()
     result = fetchFace()
-    for i, res in enumerate(result):
-        try:
-            if i == 0:
-                if res['faceAttributes']['emotion']['happiness'] < 50:
-                    rover.setupPins()
-                    rover.dispense()
-            res['date'] = datetime.now().isoformat()
-            print(res)
-            r = firebase.post('/users', res)
-        except Exception as e:
-            print(str(e))
+    print(result)
+    if len(result) == 0:
+        return 
+    result = result[0]
+    try:
+        if result['faceAttributes']['emotion']['happiness'] < 50:
+            print('low happiness')
+            rover.dispense()
+            mixer.music.load('candy_georgie.mp3')
+            mixer.music.play()
+        res['date'] = datetime.now().isoformat()
+        print(res)
+        r = firebase.post('/users', res)
+    except Exception as e:
+        print(str(e))
 
 if __name__ == '__main__':
     while True:
