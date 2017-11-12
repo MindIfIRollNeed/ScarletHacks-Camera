@@ -138,7 +138,7 @@
 		        var surpriseVal = all.faceAttributes.emotion.surprise;
 
 		        updateGraph(angerVal, contempVal, disgustVal, fearVal, happinessVal, neutralVal, sadnessVal, surpriseVal);
-		        document.getElementById("smileVal").innerHTML = smileVal;
+		        document.getElementById("smileVal").innerHTML = String(smileVal*100) + "%";
 		    });
 			
 
