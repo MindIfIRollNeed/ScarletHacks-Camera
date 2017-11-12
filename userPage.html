@@ -52,7 +52,7 @@
 <body>
 	<h1>Care Bot</h1>
     <ul>
-    	<li><a href="#">Admin Page</a></li>
+    	<li><a href="index.html">Admin Page</a></li>
     </ul>
     <br><br><br>
     <hr>
@@ -101,7 +101,7 @@
 
 			var db = firebase.database();			
 
-		    db.endAt().limit(1).on('child_added', function(snapshot) {
+		    db.ref().on('child_added', function(snapshot) {
 		    	all = snapshot.val();
 		    	console.log(all);
 		        //document.getElementById("qty").innerHTML = total;
