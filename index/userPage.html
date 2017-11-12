@@ -2,14 +2,27 @@
 <html>
 <head>
 	<title></title>
-	<!-- Google fonts -->
+		<meta charset="utf-8">
+		<!-- Google fonts -->
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
 		<link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
 
 		<!-- D3.js -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
-		
+		<link rel="stylesheet" type="text/css" href="../public/css/styles.css">
+	    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Quicksand:300,400,700" />
+	    <link rel="stylesheet" type="text/css" href="css/foundation.min.css" />
+	    <link rel="stylesheet" type="text/css" href="css/responsive-tables.css" />
+	    <link rel="stylesheet" type="text/css" href="css/custom_faceoff.css" />
+	    <link rel="stylesheet" type="text/css" href="css/animate.min.css" />
+	    <script type="text/javascript" src="js/bodymovin.js"></script>
+	    <script src="js/jquery.js"></script>
+
+
 		<style>
+			html {
+				height: 1000px;
+			}
 			body {
 				font-family: 'Open Sans', sans-serif;
 				font-size: 11px;
@@ -18,6 +31,7 @@
 				text-align: center;
 				text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
 				cursor: default;
+				height: 100%;
 			}
 			
 			.legend {
@@ -28,19 +42,43 @@
 			.tooltip {
 				fill: #333333;
 			}
+
+			#bodymovin svg {
+				height: 100px!important;
+			}
 		</style>
 
 </head>
 <body>
-	<h2>Firebase Example</h2>
-    <input type='text' id='messageInput'  placeholder='Enter your data here...'>
-    <button type="button" onclick="savedata()">Save Data</button>
+	<h1>Care Bot</h1>
+    <ul>
+    	<li><a href="#">User Page</a></li>
+    </ul>
     <br><br><br>
     <hr>
-    <h1 id='qty'>VALUE</h1>
-
-
-
+    <br>
+    <div id="bodymovin" style="height: 100px"></div>
+	<p>Transferring Data...</p>
+    
+    <h3>Overall Emotion:</h3>
+    <script src="js/what-input.js"></script>
+	<script src="js/foundation.min.js"></script>
+	<script src="js/custom_faceoff.js"></script>
+    <script>
+	    var anim;
+	    var elem = document.getElementById('bodymovin')
+	    var animData = {
+	        container: elem,
+	        renderer: 'svg',
+	        loop: true,
+	        autoplay: false,
+	        rendererSettings: {
+	            progressiveLoad:false
+	        },
+	        path: 'json/connecting.json'
+	    };
+	    anim = bodymovin.loadAnimation(animData);
+  	</script>
 
     <div class="radarChart"></div>
 
@@ -92,17 +130,26 @@
 			     	var totalNeutral = 0;
 			     	var totalSadness = 0;
 			     	var totalSurprise = 0;
-			     	for (user in all) {
-			     		totalAge += all[user].faceAttributes.age;
-						totalSmile += all[user].faceAttributes.smile;
-						totalAnger += all[user].faceAttributes.emotion.anger;
-						totalContempt += all[user].faceAttributes.emotion.contempt;
-						totalDisgust += all[user].faceAttributes.emotion.disgust;
-						totalFear += all[user].faceAttributes.emotion.fear;
-						totalHappiness += all[user].faceAttributes.emotion.happiness;
-						totalNeutral += all[user].faceAttributes.emotion.neutral;
-						totalSadness += all[user].faceAttributes.emotion.sadness;
-						totalSurprise += all[user].faceAttributes.emotion.surprise;
+			     	var totalMales = 0;
+			     	var totalFemales = 0;
+			     	for (key in all) {
+			     		user = all[key]
+			     		totalAge += user.faceAttributes.age;
+						totalSmile += user.faceAttributes.smile;
+						totalAnger += user.faceAttributes.emotion.anger;
+						totalContempt += user.faceAttributes.emotion.contempt;
+						totalDisgust += user.faceAttributes.emotion.disgust;
+						totalFear += user.faceAttributes.emotion.fear;
+						totalHappiness += user.faceAttributes.emotion.happiness;
+						totalNeutral += user.faceAttributes.emotion.neutral;
+						totalSadness += user.faceAttributes.emotion.sadness;
+						totalSurprise += user.faceAttributes.emotion.surprise;
+						if (user.faceAttributes.gender == "male") {
+							totalMales += 1;
+						}
+						else {
+							totalFemales += 1;
+						}
 			     	};
 
 			     	totalEntries = Object.keys(all).length;
