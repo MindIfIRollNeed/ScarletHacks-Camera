@@ -2,7 +2,33 @@
 <html>
 <head>
 	<title></title>
+	<!-- Google fonts -->
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
 
+		<!-- D3.js -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+		
+		<style>
+			body {
+				font-family: 'Open Sans', sans-serif;
+				font-size: 11px;
+				font-weight: 300;
+				fill: #242424;
+				text-align: center;
+				text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
+				cursor: default;
+			}
+			
+			.legend {
+				font-family: 'Raleway', sans-serif;
+				fill: #333333;
+			}
+			
+			.tooltip {
+				fill: #333333;
+			}
+		</style>
 
 </head>
 <body>
@@ -11,32 +37,131 @@
     <button type="button" onclick="savedata()">Save Data</button>
     <br><br><br>
     <hr>
-    <h2>Results</h2>
-    <textarea rows="10" cols="50" id="results"></textarea>
+    <h1 id='qty'>VALUE</h1>
+
+
+
+
+    <div class="radarChart"></div>
+
+	<script src="radarChart.js"></script>
+
 
 	<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
 	<script>
-		  // Initialize Firebase
-		  var config = {
-		    apiKey: "AIzaSyCMmZBurb1ALswmrs5ZagiHP42AmctkPI4",
-		    authDomain: "scarlethacks-e6978.firebaseapp.com",
-		    databaseURL: "https://scarlethacks-e6978.firebaseio.com",
-		    projectId: "scarlethacks-e6978",
-		    storageBucket: "scarlethacks-e6978.appspot.com",
-		    messagingSenderId: "846336008636"
-		  };
-		  firebase.initializeApp(config);
-
-
-		  var messageField = document.getElementById('messageInput');
-    	  var messageResults = document.getElementById('results');
-
-		  var db = firebase.database();
-		  function writeUserData(userId, hapVal) {
-			  db.ref('users/' + userId).set({
-			    hap: hapVal
-			  });
+			// Initialize Firebase
+			var config = {
+			  apiKey: "AIzaSyCMmZBurb1ALswmrs5ZagiHP42AmctkPI4",
+			  authDomain: "scarlethacks-e6978.firebaseapp.com",
+			  databaseURL: "https://scarlethacks-e6978.firebaseio.com",
+			  projectId: "scarlethacks-e6978",
+			  storageBucket: "scarlethacks-e6978.appspot.com",
+			  messagingSenderId: "846336008636"
 			};
+			firebase.initializeApp(config);
+
+
+			var db = firebase.database();
+			function writeUserData(userId, hapVal) {
+				db.ref('users/' + userId).set({
+					hap: hapVal
+				});
+			};
+			
+			var avgAge = 0;
+			var avgSmile = 0;
+			var avgAnger = 0;
+			var avgContempt = 0;
+			var avgDisgust = 0;
+			var avgFear = 0;
+			var avgHappiness = 0;
+			var avgNeutral = 0;
+			var avgSadness = 0;
+			var avgSurprise = 0;
+
+			//var startListening = function() {
+			     db.ref().on('value', function(snapshot) {
+			     	all = snapshot.child("users/").val();
+			     	var totalAge = 0;
+			     	var totalSmile = 0;
+			     	var totalAnger = 0;
+			     	var totalContempt = 0;
+			     	var totalDisgust = 0;
+			     	var totalFear = 0;
+			     	var totalHappiness = 0;
+			     	var totalNeutral = 0;
+			     	var totalSadness = 0;
+			     	var totalSurprise = 0;
+			     	for (user in all) {
+			     		totalAge += all[user].faceAttributes.age;
+						totalSmile += all[user].faceAttributes.smile;
+						totalAnger += all[user].faceAttributes.emotion.anger;
+						totalContempt += all[user].faceAttributes.emotion.contempt;
+						totalDisgust += all[user].faceAttributes.emotion.disgust;
+						totalFear += all[user].faceAttributes.emotion.fear;
+						totalHappiness += all[user].faceAttributes.emotion.happiness;
+						totalNeutral += all[user].faceAttributes.emotion.neutral;
+						totalSadness += all[user].faceAttributes.emotion.sadness;
+						totalSurprise += all[user].faceAttributes.emotion.surprise;
+			     	};
+
+			     	totalEntries = Object.keys(all).length;
+			     	avgAge = totalAge/totalEntries;
+					avgSmile = totalSmile/totalEntries;
+					avgAnger = totalAnger/totalEntries;
+					avgContempt = totalContempt/totalEntries;
+					avgDisgust = totalDisgust/totalEntries;
+					avgFear = totalFear/totalEntries;
+					avgHappiness = totalHappiness/totalEntries;
+					avgNeutral = totalNeutral/totalEntries;
+					avgSadness = totalSadness/totalEntries;
+					avgSurprise = totalSurprise/totalEntries;
+					console.log(avgAge);
+					console.log(avgSmile);
+					console.log(avgAnger);
+					console.log(avgContempt);
+					console.log(avgDisgust);
+					console.log(avgFear);
+					console.log(avgHappiness);
+					console.log(avgNeutral);
+					console.log(avgSadness);
+					console.log(avgSurprise);
+			        //document.getElementById("qty").innerHTML = total;
+
+			        var margin = {top: 100, right: 100, bottom: 100, left: 100},
+					width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
+					height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
+			        
+			        var data = [
+					  [//iPhone
+						{axis:"Anger",value:avgAnger},
+						{axis:"Contempt",value:avgContempt},
+						{axis:"Disgust",value:avgDisgust},
+						{axis:"Fear",value:avgFear},
+						{axis:"Happiness",value:avgHappiness},
+						{axis:"Neutral",value:avgNeutral},
+						{axis:"Sadness",value:avgSadness},
+						{axis:"Surprise",value:avgSurprise}			
+					  ]
+					];
+
+
+			        var color = d3.scale.ordinal()
+					.range(["#CC333F","#00A0B0"]);
+					
+					var radarChartOptions = {
+					  w: width,
+					  h: height,
+					  margin: margin,
+					  maxValue: 0.5,
+					  levels: 5,
+					  roundStrokes: true,
+					  color: color
+					};
+
+			        RadarChart(".radarChart", data, radarChartOptions);
+			      });
+			 //}
 
 		  // {'faceAttributes': {
 		  //          'age': 21.3,
@@ -74,6 +199,25 @@
    		  // }
 
 
+		/* Radar chart design created by Nadieh Bremer - VisualCinnamon.com */
+      
+			////////////////////////////////////////////////////////////// 
+			//////////////////////// Set-Up ////////////////////////////// 
+			////////////////////////////////////////////////////////////// 
+
+			
+					
+			////////////////////////////////////////////////////////////// 
+			////////////////////////// Data ////////////////////////////// 
+			////////////////////////////////////////////////////////////// 
+			
+			
+			////////////////////////////////////////////////////////////// 
+			//////////////////// Draw the Chart ////////////////////////// 
+			////////////////////////////////////////////////////////////// 
+
+			//Call function to draw the Radar chart
+			
 	</script>
 </body>
 </html>
