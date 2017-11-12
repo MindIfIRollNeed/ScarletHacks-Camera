@@ -64,6 +64,7 @@
     <h3>Current Emotion:</h3>
     <div id="currentGraph"></div>
 
+    <div><h4>Smile Rating: </h4><h4 id="smileVal"></h4></div>
 
 
 
@@ -86,10 +87,6 @@
 	    };
 	    anim = bodymovin.loadAnimation(animData);
   	</script>
-
-    <div class="radarChart"></div>
-
-	<script src="radarChart.js"></script>
 
 
 	<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
@@ -141,6 +138,7 @@
 		        var surpriseVal = all.faceAttributes.emotion.surprise;
 
 		        updateGraph(angerVal, contempVal, disgustVal, fearVal, happinessVal, neutralVal, sadnessVal, surpriseVal);
+		        document.getElementById("smileVal").innerHTML = smileVal;
 		    });
 			
 
