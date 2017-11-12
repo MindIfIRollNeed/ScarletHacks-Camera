@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+
+
+</head>
+<body>
+	<h2>Firebase Example</h2>
+    <input type='text' id='messageInput'  placeholder='Enter your data here...'>
+    <button type="button" onclick="savedata()">Save Data</button>
+    <br><br><br>
+    <hr>
+    <h2>Results</h2>
+    <textarea rows="10" cols="50" id="results"></textarea>
+
+	<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+	<script>
+		  // Initialize Firebase
+		  var config = {
+		    apiKey: "AIzaSyCMmZBurb1ALswmrs5ZagiHP42AmctkPI4",
+		    authDomain: "scarlethacks-e6978.firebaseapp.com",
+		    databaseURL: "https://scarlethacks-e6978.firebaseio.com",
+		    projectId: "scarlethacks-e6978",
+		    storageBucket: "scarlethacks-e6978.appspot.com",
+		    messagingSenderId: "846336008636"
+		  };
+		  firebase.initializeApp(config);
+
+
+		  var messageField = document.getElementById('messageInput');
+    	  var messageResults = document.getElementById('results');
+
+		  var db = firebase.database();
+		  function writeUserData(userId, hapVal) {
+			  db.ref('users/' + userId).set({
+			    hap: hapVal
+			  });
+			};
+
+		  // {'faceAttributes': {
+		  //          'age': 21.3,
+          //          'emotion': {'anger': 0.0,
+          //                      'contempt': 0.053,
+          //                      'disgust': 0.0,
+          //                      'fear': 0.0,
+          //                      'happiness': 0.844,
+          //                      'neutral': 0.102,
+          //                      'sadness': 0.0,
+          //                      'surprise': 0.001},
+          //          'facialHair': {'beard': 0.0,
+          //                         'moustache': 0.0,
+          //                         'sideburns': 0.1},
+          //          'gender': 'male',
+          //          'glasses': 'NoGlasses',
+          //          'hair': {'bald': 0.0,
+          //                   'hairColor': [{'color': 'brown',
+          //                                  'confidence': 1.0},
+          //                                 {'color': 'black',
+          //                                  'confidence': 0.85},
+          //                                 {'color': 'other',
+          //                                  'confidence': 0.14},
+          //                                 {'color': 'blond',
+          //                                  'confidence': 0.1},
+          //                                 {'color': 'red', 'confidence': 0.09},
+          //                                 {'color': 'gray',
+          //                                  'confidence': 0.06}],
+          //                   'invisible': False},
+          //          'headPose': {'pitch': 0.0, 'roll': -3.3, 'yaw': -4.2},
+          //          'makeup': {'eyeMakeup': True, 'lipMakeup': False},
+          //          'smile': 0.844},
+ 		  //		  'faceId': 'a1d57156-8cd9-4aaf-9d75-30b3c70d0690',
+   		  // 		  'faceRectangle': {'height': 240, 'left': 506, 'top': 134, 'width': 240}
+   		  // }
+
+
+	</script>
+</body>
+</html>
