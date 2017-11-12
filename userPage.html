@@ -52,15 +52,15 @@
 <body>
 	<h1>Care Bot</h1>
     <ul>
-    	<li><a href="userPage.html">User Page</a></li>
+    	<li><a href="#">Admin Page</a></li>
     </ul>
     <br><br><br>
     <hr>
     <br>
     <div id="bodymovin" style="height: 100px"></div>
-	<p>Transferring Data...</p>
+	<p>Detecting Facial Data...</p>
     
-    <h3>Overall Emotion:</h3>
+    <h3>Current Emotion:</h3>
     <script src="js/what-input.js"></script>
 	<script src="js/foundation.min.js"></script>
 	<script src="js/custom_faceoff.js"></script>
@@ -99,115 +99,15 @@
 			firebase.initializeApp(config);
 
 
-			var db = firebase.database();
-			function writeUserData(userId, hapVal) {
-				db.ref('users/' + userId).set({
-					hap: hapVal
-				});
-			};
-			
-			var avgAge = 0;
-			var avgSmile = 0;
-			var avgAnger = 0;
-			var avgContempt = 0;
-			var avgDisgust = 0;
-			var avgFear = 0;
-			var avgHappiness = 0;
-			var avgNeutral = 0;
-			var avgSadness = 0;
-			var avgSurprise = 0;
+			var db = firebase.database();			
 
-			//var startListening = function() {
-			     db.ref().on('value', function(snapshot) {
-			     	all = snapshot.child("users/").val();
-			     	var totalAge = 0;
-			     	var totalSmile = 0;
-			     	var totalAnger = 0;
-			     	var totalContempt = 0;
-			     	var totalDisgust = 0;
-			     	var totalFear = 0;
-			     	var totalHappiness = 0;
-			     	var totalNeutral = 0;
-			     	var totalSadness = 0;
-			     	var totalSurprise = 0;
-			     	var totalMales = 0;
-			     	var totalFemales = 0;
-			     	for (key in all) {
-			     		user = all[key]
-			     		totalAge += user.faceAttributes.age;
-						totalSmile += user.faceAttributes.smile;
-						totalAnger += user.faceAttributes.emotion.anger;
-						totalContempt += user.faceAttributes.emotion.contempt;
-						totalDisgust += user.faceAttributes.emotion.disgust;
-						totalFear += user.faceAttributes.emotion.fear;
-						totalHappiness += user.faceAttributes.emotion.happiness;
-						totalNeutral += user.faceAttributes.emotion.neutral;
-						totalSadness += user.faceAttributes.emotion.sadness;
-						totalSurprise += user.faceAttributes.emotion.surprise;
-						if (user.faceAttributes.gender == "male") {
-							totalMales += 1;
-						}
-						else {
-							totalFemales += 1;
-						}
-			     	};
+		    db.endAt().limit(1).on('child_added', function(snapshot) {
+		    	all = snapshot.val();
+		    	console.log(all);
+		        //document.getElementById("qty").innerHTML = total;
 
-			     	totalEntries = Object.keys(all).length;
-			     	avgAge = totalAge/totalEntries;
-					avgSmile = totalSmile/totalEntries;
-					avgAnger = totalAnger/totalEntries;
-					avgContempt = totalContempt/totalEntries;
-					avgDisgust = totalDisgust/totalEntries;
-					avgFear = totalFear/totalEntries;
-					avgHappiness = totalHappiness/totalEntries;
-					avgNeutral = totalNeutral/totalEntries;
-					avgSadness = totalSadness/totalEntries;
-					avgSurprise = totalSurprise/totalEntries;
-					console.log(avgAge);
-					console.log(avgSmile);
-					console.log(avgAnger);
-					console.log(avgContempt);
-					console.log(avgDisgust);
-					console.log(avgFear);
-					console.log(avgHappiness);
-					console.log(avgNeutral);
-					console.log(avgSadness);
-					console.log(avgSurprise);
-			        //document.getElementById("qty").innerHTML = total;
-
-			        var margin = {top: 100, right: 100, bottom: 100, left: 100},
-					width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
-					height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
+		    });
 			        
-			        var data = [
-					  [//iPhone
-						{axis:"Anger",value:avgAnger},
-						{axis:"Contempt",value:avgContempt},
-						{axis:"Disgust",value:avgDisgust},
-						{axis:"Fear",value:avgFear},
-						{axis:"Happiness",value:avgHappiness},
-						{axis:"Neutral",value:avgNeutral},
-						{axis:"Sadness",value:avgSadness},
-						{axis:"Surprise",value:avgSurprise}			
-					  ]
-					];
-
-
-			        var color = d3.scale.ordinal()
-					.range(["#CC333F","#00A0B0"]);
-					
-					var radarChartOptions = {
-					  w: width,
-					  h: height,
-					  margin: margin,
-					  maxValue: 0.5,
-					  levels: 5,
-					  roundStrokes: true,
-					  color: color
-					};
-
-			        RadarChart(".radarChart", data, radarChartOptions);
-			      });
 			 //}
 
 		  // {'faceAttributes': {
@@ -244,26 +144,6 @@
  		  //		  'faceId': 'a1d57156-8cd9-4aaf-9d75-30b3c70d0690',
    		  // 		  'faceRectangle': {'height': 240, 'left': 506, 'top': 134, 'width': 240}
    		  // }
-
-
-		/* Radar chart design created by Nadieh Bremer - VisualCinnamon.com */
-      
-			////////////////////////////////////////////////////////////// 
-			//////////////////////// Set-Up ////////////////////////////// 
-			////////////////////////////////////////////////////////////// 
-
-			
-					
-			////////////////////////////////////////////////////////////// 
-			////////////////////////// Data ////////////////////////////// 
-			////////////////////////////////////////////////////////////// 
-			
-			
-			////////////////////////////////////////////////////////////// 
-			//////////////////// Draw the Chart ////////////////////////// 
-			////////////////////////////////////////////////////////////// 
-
-			//Call function to draw the Radar chart
 			
 	</script>
 </body>
