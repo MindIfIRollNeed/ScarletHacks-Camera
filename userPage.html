@@ -17,6 +17,7 @@
 	    <link rel="stylesheet" type="text/css" href="css/animate.min.css" />
 	    <script type="text/javascript" src="js/bodymovin.js"></script>
 	    <script src="js/jquery.js"></script>
+	    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 
 		<style>
@@ -61,6 +62,12 @@
 	<p>Detecting Facial Data...</p>
     
     <h3>Current Emotion:</h3>
+    <div id="currentGraph"></div>
+
+
+
+
+
     <script src="js/what-input.js"></script>
 	<script src="js/foundation.min.js"></script>
 	<script src="js/custom_faceoff.js"></script>
@@ -98,16 +105,51 @@
 			};
 			firebase.initializeApp(config);
 
+			function updateGraph(angerVal, contempVal, disgustVal, fearVal, happinessVal, neutralVal, sadnessVal, surpriseVal) {
+			  Plotly.animate('currentGraph', {
+			    data: [{y: [angerVal, contempVal, disgustVal, fearVal, happinessVal, neutralVal, sadnessVal, surpriseVal]}],
+			    traces: [0],
+			    layout: {}
+			  }, {
+			    transition: {
+			      duration: 500,
+			      easing: 'cubic-in-out'
+			    }
+			  })
+			};
+
+			Plotly.plot('currentGraph', [{
+			  x: ['Anger', 'Contemp', 'Disgust', 'Fear', 'Happiness', 'Neutral', 'Sadness', 'Surprise'],
+			  y: [0, 0, 0, 0, 0, 0, 0, 0],
+			  line: {simplify: true}
+			}], {displayModeBar: false}, {displayLogo: false});
 
 			var db = firebase.database();			
 
-		    db.ref().on('child_added', function(snapshot) {
+		    db.ref('users/').limitToLast(1).on('child_added', function(snapshot) {
 		    	all = snapshot.val();
 		    	console.log(all);
 		        //document.getElementById("qty").innerHTML = total;
+		        var smileVal = all.faceAttributes.smile;
+		        var angerVal = all.faceAttributes.emotion.anger;
+		        var contempVal = all.faceAttributes.emotion.contempt;
+		        var disgustVal = all.faceAttributes.emotion.disgust;
+		        var fearVal = all.faceAttributes.emotion.fear;
+		        var happinessVal = all.faceAttributes.emotion.happiness;
+		        var neutralVal = all.faceAttributes.emotion.neutral;
+		        var sadnessVal = all.faceAttributes.emotion.sadness;
+		        var surpriseVal = all.faceAttributes.emotion.surprise;
 
+		        updateGraph(angerVal, contempVal, disgustVal, fearVal, happinessVal, neutralVal, sadnessVal, surpriseVal);
 		    });
-			        
+			
+
+
+
+
+			
+
+			    
 			 //}
 
 		  // {'faceAttributes': {
